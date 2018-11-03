@@ -5,18 +5,23 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
+    public Socket client;
+    public PrintWriter out;
+    public BufferedReader in;
     int port;
     ServerSocket listener;
     public Server(int p) throws Exception {
         port = p;
         ServerSocket listener = new ServerSocket(port);
+        init();
     }
-    Socket socket = listener.accept();
-    PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-    String inputLine;
-    while ((inputLine = in) != null) {
-
+    public void init() throws Exception {
+        client = listener.accept();
+        out = new PrintWriter(client.getOutputStream(), true);
+        in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+        while (in.readLine() != null) {
+            out.println(in.readLine());
+        }
     }
 
 }
